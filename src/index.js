@@ -3,7 +3,7 @@ const Discord = require("discord.js")
 const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] })
 
 
-let moviesList = ["oie","oiee","oieee","oieeee","oieeeee","oieeeeee",]
+let moviesList = []
 
 client.on("ready", () => {
     console.log(`logged in as ${client.user.tag}`)
@@ -73,7 +73,7 @@ function addMore(msg) {
             moviesList.push(element)
             msg.reply(`o filme " *${element}* " foi adicionado com sucesso ✅`)
         } else {
-            msg.send( `o filme " *${element}* " ja existe na lista ❌`)
+            msg.reply( `o filme " *${element}* " ja existe na lista ❌`)
         }
     });
 }
