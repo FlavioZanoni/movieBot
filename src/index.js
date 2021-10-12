@@ -1,8 +1,9 @@
 require("dotenv").config()
 const Discord = require("discord.js")
-const client = new Discord.Client()
+const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] })
 
-let moviesList = []
+
+let moviesList = ["oie","oiee","oieee","oieeee","oieeeee","oieeeeee",]
 
 client.on("ready", () => {
     console.log(`logged in as ${client.user.tag}`)
@@ -23,6 +24,7 @@ let rmPref = ">rm"
 let lsPref = ">ls"
 let randPref =">rand"
 let helpPref = ">help"
+let exportPref = ">export"
 
 
 client.on("message", msg => {
@@ -43,6 +45,9 @@ client.on("message", msg => {
 
     } else if (msg.content.startsWith(helpPref)) {
         help(msg)
+
+    } else if (msg.content.startsWith(exportPref)) {
+        exportList(msg)
 
     }
 })
@@ -92,8 +97,18 @@ function chooseRandom(msg) {
     msg.reply(`🎲 o filme sorteado foi o: *${moviesList[randEntry]}*`)
 }
 
+
+function exportList(msg) {
+    let str = "``` >listAdd "
+    moviesList.forEach(element => {
+        str += `${element},`
+    });
+    let command = str.slice(0, -1)
+    msg.reply(command + "```")
+}
+
 function help(msg) {
-    msg.reply("```Bem-vindo(a) à central de ajuda do Bot foda de filme foda. \n Os comandos disponiveis são: \n ✏️>add: esse comando é usado para adicionar um filme a lista (mas so um filme por vez) EX: >add filme1 \n -------------------- \n 📝>listAdd: esse comando pode ser utilizado para adicionar mais de um filme por vez, EX: >listAdd filme1,filme2,filme3 \n -------------------- \n ❌>rm: esse comando é usado para remover um filme da lista, mas atenção, a grafia do nome do filme precisa ser igual a do filme que já está na lista, EX: >rm filme1  \n -------------------- \n 📜>ls: esse comando retorna a lista de filmes que estão na lista, EX: >ls \n -------------------- \n 🎲>rand: esse comando ira retornar um filme aleatório que esta na lista, EX: >rand ```")
+    msg.reply("```Bem-vindo(a) à central de ajuda do Bot foda de filme foda. \n Os comandos disponiveis são: \n ✏️>add: esse comando é usado para adicionar um filme a lista (mas so um filme por vez) EX: >add filme1 \n -------------------- \n 📝>listAdd: esse comando pode ser utilizado para adicionar mais de um filme por vez, EX: >listAdd filme1,filme2,filme3 \n -------------------- \n ❌>rm: esse comando é usado para remover um filme da lista, mas atenção, a grafia do nome do filme precisa ser igual a do filme que já está na lista, EX: >rm filme1  \n -------------------- \n 📜>ls: esse comando retorna a lista de filmes que estão na lista, EX: >ls \n -------------------- \n 🎲>rand: esse comando ira retornar um filme aleatório que esta na lista, EX: >rand \n -------------------- \n 📩>export: esse comando gera um comando para dar input na lista de filmes novamente, EX: >export```")
 }
 
 function exists(movie) {
