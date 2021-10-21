@@ -19,12 +19,9 @@ async function readList() {
 client.on("ready", () => {
     console.log(`logged in as ${client.user.tag}`)
     // bot rich presence
-    client.user.setPresence({
-        status: 'online',
-        activity: {
-            name: "filmes fodas",
-            type: "WATCHING",
-        }
+    client.user.setActivity({
+        name: "Filme Foda",
+        type: "WATCHING",
     })
 })
 
@@ -128,10 +125,11 @@ async function rmMovie(msg) {
     }
 }
 
-function chooseRandom(msg) {
+async function chooseRandom(msg) {
+    let moviesList = await readList()
     let len = moviesList.length - 1 
     randEntry = Math.floor(Math.random() * len)
-    msg.reply(`🎲 o filme sorteado foi o: *${moviesList[randEntry]}*`)
+    msg.reply(`🎲 O filme sorteado foi o: *${moviesList[randEntry]}*`)
 }
 
 async function exportList(msg) {
