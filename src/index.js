@@ -113,6 +113,7 @@ async function addMore(msg) {
     
                 msg.reply(`o filme " *${trimmed}* " foi adicionado com sucesso ✅`)
             } else {
+                console.count("movieadd")
                 msg.reply( `o filme " *${trimmed}* " ja existe na lista ❌`)
             }
         })
@@ -122,17 +123,71 @@ async function addMore(msg) {
 async function ls(msg){
     let moviesList = await readList()
     let len = moviesList.length
+    let charsLen = 0
+
+    moviesList.forEach(element => {
+        charsLen += element.length
+        // +or- number of chars that are added latter for each movie assuming no one is puttin more than 999 movies in this
+        charsLen += 8
+    })
+
+    let divisions = Math.ceil(charsLen / 2000)
+    let elementsForEachDivision =  Math.ceil( len / divisions)
+
     if (len == 0 ) {
-        msg.reply("🧐 huh? não tem nenhum filme na lista !! 😩😫😢😭😭😖😈. Para adicionar é so usar o comando '>add {nomeDoFilme'} 😉")
+        msg.reply("🧐 huh? não tem nenhum filme na lista !! 😩😫😢😭😭😖😈. Para adicionar é so usar o comando '>add {nomeDoFilme}' 😉")
     } else {
         let list = []
+        let count = 0
         let i = 1
+
+        if (divisions == 1) {
+            moviesList.forEach(element => {
+                list.push('\n' + i + " - " + element)
+                i++
+            })
+
+            msg.reply(`📜 Existem atualmente **${len}** filmes na lista, \nOs filmes são: \n`)
+            msg.reply("```" + `${list}` + "\n```")
+        } else {
+            msg.reply(`📜 Existem atualmente **${len}** filmes na lista, \nOs filmes são: \n`)
+            for(let c = 0; c < divisions; c++) {
+                for(let d = 0; d < elementsForEachDivision; d++ ) {
+                    // not the best solution buuuut....
+                    if(moviesList[count] != undefined) {
+                        // the +1 just to make the movies list start at 1 and not 0
+                        list.push(`\n ${(count + 1)} - ${moviesList[count]}`)
+                        console.log(count)
+                        count++
+                    }
+                }
+                msg.reply("```" + `${list}` + "\n```")
+                list = []
+            }
+        }
+
+        //#region // code if you want to break the list by some fixed amout of movies
+        /* let list = []
+        let i = 1
+        let c = 1
+        amountOfMovies = 50
+
+        msg.reply(`📜 Existem atualmente **${len}** filmes na lista, \nOs filmes são: \n`)
 
         moviesList.forEach(element => {
             list.push('\n' + i + " - " + element)
             i++
+            c++
+            if(c > amountOfMovies) {
+                msg.reply("```" + `${list}` + "\n```")
+                list = []
+                c = 1
+            }
         })
-        msg.reply(`📜 Existem atualmente **${len}** filmes na lista, \nOs filmes são: \n` + "```" + `${list}` + "\n```")
+        if(list.length != 0) {
+            msg.reply("```" + `${list}` + "\n```")
+        } */
+        //#endregion
     }
 }
 
@@ -180,7 +235,7 @@ async function chooseRandom(msg) {
     let moviesList = await readList()
     let len = moviesList.length - 1 
     randEntry = Math.floor(Math.random() * len)
-    msg.reply(`🎲 O filme sorteado foi o: *${moviesList[randEntry]}*`)
+    msg.reply(`🎲 O filme sorteado foi:  *${(moviesList.indexOf(moviesList[randEntry]) + 1)} - ${moviesList[randEntry]}*`)
 }
 
 async function exportList(msg) {
@@ -196,7 +251,7 @@ async function exportList(msg) {
 
 function help(msg) {
     msg.reply(
-        "```Bem-vindo(a) à central de ajuda do Bot foda de filme foda.\n Os comandos disponiveis são: \n ✏️>add: esse comando é usado para adicionar um filme à lista (mas só um filme por vez) EX: >add filme1 \n -------------------- \n 📝>listAdd: esse comando pode ser utilizado para adicionar mais de um filme por vez, os filmes precisam ser separados por vírgula, EX: >listAdd filme1, filme2, filme3 \n -------------------- \n ❌>rm: esse comando é usado para remover um filme da lista, mas atenção, a grafia do nome do filme precisa ser igual a do filme que já está na lista, EX: >rm filme1 \n ou você pode simplesmente usar a posição do filme na lista para retira-lo EX: >rm 6  \n -------------------- \n 📜>ls: esse comando retorna a lista de filmes que estão na lista, EX: >ls \n -------------------- \n 🎲>rand: esse comando ira retornar um filme aleatório que esta na lista, EX: >rand \n -------------------- \n 📩>export: esse comando gera um comando para dar input na lista de filmes novamente, EX: >export \n -------------------- \n 🤫 >unRem: esse comando coloca de novo na lista o ultimo filme tirado, (tenha cuidado, a memoria é so de um filme, e se o bot for desligado esse ultimo filme será perdido), EX: >unRem```"
+        "```Bem-vindo(a) à central de ajuda do Bot foda de filme foda.\n Os comandos disponiveis são: \n ✏️>add: esse comando é usado para adicionar um filme à lista (mas só um filme por vez) EX: >add filme1 \n -------------------- \n 📝>listAdd: esse comando pode ser utilizado para adicionar mais de um filme por vez, os filmes precisam ser separados por vírgula, EX: >listAdd filme1, filme2, filme3 \n -------------------- \n ❌>rm: esse comando é usado para remover um filme da lista, mas atenção, a grafia do nome do filme precisa ser igual a do filme que já está na lista, EX: >rm filme1 \n ou você pode simplesmente usar a posição do filme na lista para retira-lo EX: >rm 6  \n -------------------- \n 📜>ls: esse comando retorna a lista de filmes que estão na lista, EX: >ls \n -------------------- \n 🎲>rand: esse comando ira retornar um filme aleatório que esta na lista, EX: >rand \n -------------------- \n 📩>export: esse comando gera um comando para dar input na lista de filmes novamente, EX: >export \n -------------------- \n 🤫>unRem: esse comando coloca de novo na lista o ultimo filme tirado, (tenha cuidado, a memoria é so de um filme, e se o bot for desligado esse ultimo filme será perdido), EX: >unRem```"
     )
 }
 
