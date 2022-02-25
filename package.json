@@ -26,6 +26,8 @@
     "nodemon": "^2.0.13"
   },
   "nodemonConfig": {
-    "ignore": ["./src/movie.json"]
+    "ignore": [
+      "./src/movie.json"
+    ]
   }
 }
